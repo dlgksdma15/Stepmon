@@ -58,9 +58,23 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/browncat"
+        android:src="@drawable/whitemouse"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/levelView" />
+
+    <!-- ProgressBar for experience -->
+    <ProgressBar
+        android:id="@+id/experienceBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:max="100"
+        android:progress="0"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
 
     <Button
         android:id="@+id/resetButton"
@@ -71,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="@+id/stepCountView"
         app:layout_constraintHorizontal_bias="0.73"
         app:layout_constraintStart_toStartOf="@+id/stepCountTag"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/experienceBar"
         app:layout_constraintVertical_bias="0.866" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
