@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     SensorManager sensorManager;
     Sensor stepCountSensor;
     TextView stepCountView;
+    TextView levelView;
+    ImageView imageView;
     Button resetButton;
 
     // 현재 걸음 수
@@ -35,8 +38,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
 
         stepCountView = findViewById(R.id.stepCountView);
+        levelView = findViewById(R.id.levelView);
+        imageView = findViewById(R.id.imageView);
         resetButton = findViewById(R.id.resetButton);
-
 
         // 활동 퍼미션 체크
         if(ContextCompat.checkSelfPermission(this,
@@ -65,12 +69,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 // 현재 걸음수 초기화
                 currentSteps = 0;
                 stepCountView.setText(String.valueOf(currentSteps));
-
+                updateLevelAndImage();
             }
         });
 
     }
-
 
     public void onStart() {
         super.onStart();
@@ -95,13 +98,43 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 // 센서 이벤트가 발생할때 마다 걸음수 증가
                 currentSteps++;
                 stepCountView.setText(String.valueOf(currentSteps));
+                updateLevelAndImage();
             }
 
         }
 
     }
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    private void updateLevelAndImage() {
+        int level = getLevel(currentSteps);
+        levelView.setText("Level " + level);
+
+        // 걸음 수에 따른 이미지 변경
+        switch (level) {
+            case 1:
+                imageView.setImageResource(R.drawable.browncat);
+                break;
+            case 2:
+                imageView.setImageResource(R.drawable.browndog);
+                break;
+            case 3:
+                imageView.setImageResource(R.drawable.browndogbaby);
+                break;
+        }
+    }
+
+    private int getLevel(int steps) {
+        if (steps < 10) {
+            return 1;
+        } else if (steps < 20) {
+            return 2;
+        } else {
+            return 3;
+        }
     }
 }
