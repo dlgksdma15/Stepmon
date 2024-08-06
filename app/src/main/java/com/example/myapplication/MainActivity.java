@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     ImageView imageView;
     ProgressBar experienceBar;
     Button resetButton;
+    ImageView rightButton; // 오른쪽 버튼 ImageView 추가
 
     // 현재 걸음 수
     int currentSteps = 0;
@@ -54,10 +55,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
         // 걸음 센서 연결
-        // * 옵션
-        // - TYPE_STEP_DETECTOR: 리턴 값이 무조건 1, 앱이 종료되면 다시 0부터 시작
-        // - TYPE_STEP_COUNTER : 앱 종료와 관계없이 계속 기존의 값을 가지고 있다가 1씩 증가한 값을 리턴
-        //
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         stepCountSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
@@ -78,58 +75,53 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
+//        // 오른쪽 버튼 클릭 리스너 설정
+//        rightButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // 캐릭터 이미지 변경
+//                imageView.setImageResource(R.drawable.yelloduck); // 캐릭터 변경
+//            }
+//        });
     }
 
+    @Override
     public void onStart() {
         super.onStart();
         if (stepCountSensor != null) {
-            // 센서 속도 설정
-            // * 옵션
-            // - SENSOR_DELAY_NORMAL: 20,000 초 딜레이
-            // - SENSOR_DELAY_UI: 6,000 초 딜레이
-            // - SENSOR_DELAY_GAME: 20,000 초 딜레이
-            // - SENSOR_DELAY_FASTEST: 딜레이 없음
-            //
             sensorManager.registerListener(this, stepCountSensor, SensorManager.SENSOR_DELAY_FASTEST);
         }
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // 걸음 센서 이벤트 발생시
         if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-
             if (event.values[0] == 1.0f) {
-                // 센서 이벤트가 발생할때 마다 걸음수 증가
                 currentSteps++;
                 stepCountView.setText(String.valueOf(currentSteps));
-                experienceBar.setProgress(Math.min(currentSteps * 100 / maxSteps, 100));  // 경험치 바 업데이트
+                experienceBar.setProgress(Math.min(currentSteps * 100 / maxSteps, 100));
                 updateLevelAndImage();
             }
-
         }
-
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
     private void updateLevelAndImage() {
         int level = getLevel(currentSteps);
         levelView.setText("Level " + level);
-
         // 걸음 수에 따른 이미지 변경
         switch (level) {
             case 1:
-                imageView.setImageResource(R.drawable.whitecat);
+                imageView.setImageResource(R.drawable.whitemouse);
                 break;
             case 2:
-                imageView.setImageResource(R.drawable.brownmouse);
+                imageView.setImageResource(R.drawable.whitecat);
                 break;
             case 3:
-                imageView.setImageResource(R.drawable.whitecat);
+                imageView.setImageResource(R.drawable.browncat);
                 break;
         }
     }
@@ -143,4 +135,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             return 3;
         }
     }
+
 }
